@@ -9,13 +9,13 @@ class TeamsController < ApplicationController
 
   def show
     options = { include: :users }
-    render json: TeamSerializer.new([@team], options).serialized_json
+    render json: TeamSerializer.new(@team, options).serialized_json
   end
 
   def create
     team = Team.new(team_params)
     if team.save
-      render json: TeamSerializer.new([team]).serialized_json
+      render json: TeamSerializer.new(team).serialized_json
     else
       render json: { error: 'could not be created' }
     end
@@ -23,7 +23,7 @@ class TeamsController < ApplicationController
 
   def update
     if @team.update(team_params)
-      render json: TeamSerializer.new([team]).serialized_json
+      render json: TeamSerializer.new(team).serialized_json
     else
       render json: { error: 'could not be updated' }
     end
@@ -35,7 +35,7 @@ class TeamsController < ApplicationController
     @team = Team.find(params[:id])
   end
 
-  def user_params
-    params.require(:user).permit(:name, :email, :picture_url)
+  def team_params
+    params.require(:team).permit(:name, :description, :cover_url, user_ids: [])
   end
 end

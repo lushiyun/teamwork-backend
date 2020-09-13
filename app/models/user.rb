@@ -1,6 +1,6 @@
 class User < ApplicationRecord
-  has_many :memberships
+  has_many :memberships, dependent: :destroy
   has_many :teams, through: :memberships
-  validates :name, :email, presence: true
-  validates :email, uniqueness: true
+  validates :user_id, :name, presence: true
+  validates :user_id, uniqueness: true
 end

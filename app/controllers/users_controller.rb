@@ -6,21 +6,21 @@ class UsersController < ApplicationController
 
   def show
     user = User.find_by_id(params[:id])
-    render json: UserSerializer.new([user]).serialized_json
+    render json: UserSerializer.new(user).serialized_json
   end
 
   def create
-    if user = User.find_by(email: params[:email])
-      user.update(user_params)
+    user = User.new(user_params)
+    if user.save
+      render json: UserSerializer.new(user).serialized_json
     else
-      user = User.create(user_params)
+      render json: { error: 'error creating user' }
     end
-    render json: UserSerializer.new([user]).serialized_json
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :picture_url)
+    params.require(:user).permit(:user_id, :name, :picture_url)
   end
 end
