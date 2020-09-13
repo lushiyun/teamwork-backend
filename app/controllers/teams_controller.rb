@@ -3,8 +3,8 @@ class TeamsController < ApplicationController
 
   def index
     teams = Team.all
-    options = { include: :users }
-    render json: TeamSerializer.new(teams, options).serialized_json
+    # options = { include: :users }
+    render json: TeamSerializer.new(teams).serialized_json
   end
 
   def show
