@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-  belongs_to :team, optional: true
+  has_many :memberships
+  has_many :teams, through: :memberships
   validates :name, :email, presence: true
   validates :email, uniqueness: true
 end
