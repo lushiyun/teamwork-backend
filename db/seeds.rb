@@ -15,3 +15,7 @@ end
 unsplash_images.each do |img|
   Team.create(name: Faker::Coffee.blend_name, description: Faker::Coffee.notes, cover_url: img.urls.regular)
 end
+
+Team.all.each do |team|
+  team.users = User.all.sample(4)
+end

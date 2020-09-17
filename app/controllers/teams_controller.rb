@@ -1,15 +1,17 @@
 class TeamsController < ApplicationController
-  before_action :set_user, only: [:show, :update]
+  before_action :set_team, only: [:show, :update]
 
   def index
     teams = Team.all
-    # options = { include: :users }
     render json: TeamSerializer.new(teams).serialized_json
   end
 
   def show
-    options = { include: :users }
-    render json: TeamSerializer.new(@team, options).serialized_json
+    if @team
+      render json: TeamSerializer.new(@team).serialized_json
+    else
+      render json: { error: 'not found' }
+    end
   end
 
   def create
@@ -23,7 +25,7 @@ class TeamsController < ApplicationController
 
   def update
     if @team.update(team_params)
-      render json: TeamSerializer.new(team).serialized_json
+      render json: TeamSerializer.new(@team).serialized_json
     else
       render json: { error: 'could not be updated' }
     end
