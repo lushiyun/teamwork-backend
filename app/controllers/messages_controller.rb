@@ -6,7 +6,8 @@ class MessagesController < ApplicationController
     message = @team.messages.new(message_params)
     message.user = @user
     if message.save
-      
+      TeamsChannel.broadcast_to(@team, MessageSerializer.new(message).serialized_json)
+      render json: MessageSerializer.new(message).serialized_json
     end
   end
 

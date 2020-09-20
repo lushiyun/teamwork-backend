@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   def index
-    users = User.all
+    users = User.includes(:teams).all
     render json: UserSerializer.new(users).serialized_json
   end
 

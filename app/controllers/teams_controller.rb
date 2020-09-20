@@ -2,13 +2,18 @@ class TeamsController < ApplicationController
   before_action :set_team, only: [:show, :update]
 
   def index
-    teams = Team.all
+    teams = Team.includes(:users).all
     render json: TeamSerializer.new(teams).serialized_json
   end
 
   def show
     if @team
-      render json: TeamSerializer.new(@team).serialized_json
+      if params[:datetime]
+        messages = @team.messages.where('created_at > ?', params[:datetime])
+      else
+        messages = @team.messages
+      end
+      render json: MessageSerializer.new(messages).serialized_json
     else
       render json: { error: 'not found' }
     end
