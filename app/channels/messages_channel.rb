@@ -8,6 +8,7 @@ class MessagesChannel < ApplicationCable::Channel
     team = Team.find_by(id: data['teamId'])
     user = User.find_by(id: data['userId'])
     message = team.messages.create(content: data['content'], user: user)
+    UnreadsChannel.broadcast_to(team, {})
     MessageRelayJob.perform_later(message)
   end
 
