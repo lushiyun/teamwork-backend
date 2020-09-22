@@ -7,16 +7,10 @@ class TeamsController < ApplicationController
   end
 
   def show
-    if @team
-      if params[:datetime]
-        messages = @team.messages.where('created_at > ?', params[:datetime])
-      else
-        messages = @team.messages
-      end
-      render json: MessageSerializer.new(messages).serialized_json
-    else
-      render json: { error: 'not found' }
-    end
+    membership = @team.memberships.find_by(user_id: params[:user_id])
+    last_read_at = membership.last_read_at || @team.created_at
+    messages = @team.messages.where('created_at > ?', last_read_at)
+    render json: MessageSerializer.new(messages).serialized_json
   end
 
   def create
