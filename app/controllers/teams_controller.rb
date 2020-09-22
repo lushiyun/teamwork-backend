@@ -3,13 +3,16 @@ class TeamsController < ApplicationController
 
   def index
     teams = Team.includes(:users).all
-    render json: TeamSerializer.new(teams).serialized_json
+    options = { includes: :memberships }
+    render json: TeamSerializer.new(teams, options).serialized_json
   end
 
   def show
-    membership = @team.memberships.find_by(user_id: params[:user_id])
-    last_read_at = membership.last_read_at || @team.created_at
-    messages = @team.messages.where('created_at > ?', last_read_at)
+    messages = if params[:datetime]
+                @team.messages.where('created_at > ?', params[:datetime])
+               else
+                @team.messages
+               end
     render json: MessageSerializer.new(messages).serialized_json
   end
 
