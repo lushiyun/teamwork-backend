@@ -1,8 +1,7 @@
 class UnreadsChannel < ApplicationCable::Channel
   def subscribed
     stop_all_streams
-    @team = Team.find_by(id: params['id'])
-    stream_for @team
+    stream_for Team.find_by(id: params['id'])
   end
 
   def unsubscribed
