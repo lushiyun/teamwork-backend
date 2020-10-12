@@ -6,5 +6,5 @@ test:
 
 production:
   adapter: redis
-  url: redistogo-concentric-45746
-  channel_prefix: teamwork_backend_production
+  url: redis://redistogo:ead83621ff28f051d720bda52af7e87a@barb.redistogo.com:10250/
+  # channel_prefix: teamwork_backend_production
